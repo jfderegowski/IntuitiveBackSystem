@@ -6,13 +6,29 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace IntuitiveBackSystem
 {
+    /// <summary>
+    /// Manager that handles the back action and calls the current IIntuitiveBackHandler.
+    /// It will call the OnBack method of the current IIntuitiveBackHandler when the back action is performed.
+    /// </summary>
     public class IntuitiveBackManager : IInitializable, ILateDisposable
     {
-        public event Action<IBackHandler> OnRegister;
-        public event Action<IBackHandler> OnUnregister;
-
-        public IBackHandler CurrentBackHandler => BackHandlers.Count > 0 ? BackHandlers[0] : null;
-        public List<IBackHandler> BackHandlers { get; } = new();
+        /// <summary>
+        /// Event that is called when a new IIntuitiveBackHandler is registered.
+        /// </summary>
+        public event Action<IIntuitiveBackHandler> OnRegister;
+        /// <summary>
+        /// Event that is called when an IIntuitiveBackHandler is unregistered.
+        /// </summary>
+        public event Action<IIntuitiveBackHandler> OnUnregister;
+        
+        /// <summary>
+        /// The current IIntuitiveBackHandler that is registered.
+        /// </summary>
+        public IIntuitiveBackHandler CurrentIntuitiveBackHandler => BackHandlers.Count > 0 ? BackHandlers[0] : null;
+        /// <summary>
+        /// A list of all registered IIntuitiveBackHandler (First in, first out)
+        /// </summary>
+        public List<IIntuitiveBackHandler> BackHandlers { get; } = new();
 
         private InputAction _backAction;
         
@@ -31,29 +47,37 @@ namespace IntuitiveBackSystem
         }
 
         private void OnBackPerformed(CallbackContext context) => 
-            CurrentBackHandler?.OnBack();
+            CurrentIntuitiveBackHandler?.OnBack();
 
-        public void Register(IBackHandler backHandler)
+        /// <summary>
+        /// Register a new IIntuitiveBackHandler.
+        /// </summary>
+        /// <param name="intuitiveBackHandler">The IIntuitiveBackHandler to register.</param>
+        public void Register(IIntuitiveBackHandler intuitiveBackHandler)
         {
-            BackHandlers.Insert(0, backHandler);
+            BackHandlers.Insert(0, intuitiveBackHandler);
 
             if (BackHandlers.Count > 0)
                 _backAction.Enable();
             
-            OnRegister?.Invoke(backHandler);
+            OnRegister?.Invoke(intuitiveBackHandler);
         }
         
-        public void Unregister(IBackHandler backHandler)
+        /// <summary>
+        /// Unregister an IIntuitiveBackHandler.
+        /// </summary>
+        /// <param name="intuitiveBackHandler">The IIntuitiveBackHandler to unregister.</param>
+        public void Unregister(IIntuitiveBackHandler intuitiveBackHandler)
         {
-            if (backHandler == null) return;
-            if (!BackHandlers.Contains(backHandler)) return;
+            if (intuitiveBackHandler == null) return;
+            if (!BackHandlers.Contains(intuitiveBackHandler)) return;
             
-            BackHandlers.Remove(backHandler);
+            BackHandlers.Remove(intuitiveBackHandler);
             
             if (BackHandlers.Count == 0)
                 _backAction.Disable();
             
-            OnUnregister?.Invoke(backHandler);
+            OnUnregister?.Invoke(intuitiveBackHandler);
         }
         
         private void UnregisterAll()
