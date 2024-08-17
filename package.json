@@ -4,6 +4,7 @@
     "displayName": "Intuitive Back System",
     "description": "A simple and intuitive back system for Unity.",
     "unity": "2019.1",
+    "hideInEditor": "false",
     "author": {
       "name": "jfderegowski",
       "url": "https://github.com/jfderegowski"
