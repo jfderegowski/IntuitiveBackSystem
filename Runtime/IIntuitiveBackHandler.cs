@@ -1,4 +1,4 @@
-﻿namespace IntuitiveBackSystem
+﻿namespace IntuitiveBackSystem.Runtime
 {
     /// <summary>
     /// Interface that can be implemented to handle the back action.

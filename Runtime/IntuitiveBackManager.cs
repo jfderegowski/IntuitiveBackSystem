@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 using Zenject;
 using static UnityEngine.InputSystem.InputAction;
 
-namespace IntuitiveBackSystem
+namespace IntuitiveBackSystem.Runtime
 {
     /// <summary>
     /// Manager that handles the back action and calls the current IIntuitiveBackHandler.
