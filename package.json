@@ -6,7 +6,7 @@
   "unity": "2019.1",
   "dependencies": {
     "com.unity.inputsystem": "1.0.0",
-    "com.noreleasedate.singletonsystem": "https://github.com/jfderegowski/SingletonSystem.git"
+    "com.noreleasedate.singletonsystem": "https://github.com/jfderegowski/SingletonSystem.git#1.0.0"
   },
   "author": {
     "name": "jfderegowski",
