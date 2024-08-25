@@ -1,23 +1,26 @@
-using System;
 using System.Collections.Generic;
+using SingletonSystem.Runtime;
+using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using Zenject;
 
-namespace IntuitiveBackSystem.Runtime{
+namespace IntuitiveBackSystem.Runtime
+{
     /// <summary>
     /// Manager that handles the back action and calls the current IIntuitiveBackHandler.
     /// It will call the OnBack method of the current IIntuitiveBackHandler when the back action is performed.
     /// </summary>
-    public class IntuitiveBackManager : IInitializable, ILateDisposable{
+    public class IntuitiveBackManager : Singleton<IntuitiveBackManager>
+    {
         /// <summary>
         /// Event that is called when a new IIntuitiveBackHandler is registered.
         /// </summary>
-        public event Action<IIntuitiveBackHandler> onRegister;
+        [field: SerializeField] public UnityEvent<IIntuitiveBackHandler> onRegister { get; private set; } = new();
 
         /// <summary>
         /// Event that is called when an IIntuitiveBackHandler is unregistered.
         /// </summary>
-        public event Action<IIntuitiveBackHandler> onUnregister;
+        [field: SerializeField] public UnityEvent<IIntuitiveBackHandler> onUnregister { get; set; } = new();
 
         /// <summary>
         /// The current IIntuitiveBackHandler that is registered.
@@ -27,27 +30,21 @@ namespace IntuitiveBackSystem.Runtime{
         /// <summary>
         /// A list of all registered IIntuitiveBackHandler (First in, first out)
         /// </summary>
-        public List<IIntuitiveBackHandler> backHandlers{ get; } = new();
+        public List<IIntuitiveBackHandler> backHandlers { get; } = new();
 
-        private InputAction _backAction;
+        [SerializeField] private InputAction _backAction;
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="backAction">The back action to listen to.</param>
-        public IntuitiveBackManager(InputAction backAction) => _backAction = backAction;
-
-        /// <summary>
-        /// Initialize the IntuitiveBackManager.
-        /// </summary>
-        public void Initialize(){
+        protected override void Awake()
+        {
+            base.Awake();
+            
             _backAction.performed += OnBackPerformed;
         }
 
-        /// <summary>
-        /// Dispose the IntuitiveBackManager.
-        /// </summary>
-        public void LateDispose(){
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            
             _backAction.performed -= OnBackPerformed;
             UnregisterAll();
         }
@@ -59,7 +56,8 @@ namespace IntuitiveBackSystem.Runtime{
         /// Register a new IIntuitiveBackHandler.
         /// </summary>
         /// <param name="intuitiveBackHandler">The IIntuitiveBackHandler to register.</param>
-        public void Register(IIntuitiveBackHandler intuitiveBackHandler){
+        public void Register(IIntuitiveBackHandler intuitiveBackHandler)
+        {
             backHandlers.Insert(0, intuitiveBackHandler);
 
             if (backHandlers.Count > 0)
@@ -72,7 +70,8 @@ namespace IntuitiveBackSystem.Runtime{
         /// Unregister an IIntuitiveBackHandler.
         /// </summary>
         /// <param name="intuitiveBackHandler">The IIntuitiveBackHandler to unregister.</param>
-        public void Unregister(IIntuitiveBackHandler intuitiveBackHandler){
+        public void Unregister(IIntuitiveBackHandler intuitiveBackHandler)
+        {
             if (intuitiveBackHandler == null) return;
             if (!backHandlers.Contains(intuitiveBackHandler)) return;
 
@@ -84,7 +83,8 @@ namespace IntuitiveBackSystem.Runtime{
             onUnregister?.Invoke(intuitiveBackHandler);
         }
 
-        private void UnregisterAll(){
+        private void UnregisterAll()
+        {
             for (var i = 0; i < backHandlers.Count; i++)
                 Unregister(backHandlers[i]);
         }

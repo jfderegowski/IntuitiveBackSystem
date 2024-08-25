@@ -5,7 +5,8 @@
   "description": "A simple and intuitive back system for Unity.",
   "unity": "2019.1",
   "dependencies": {
-    "com.unity.inputsystem": "1.0.0"
+    "com.unity.inputsystem": "1.0.0",
+    "com.noreleasedate.singletonsystem": "https://github.com/jfderegowski/SingletonSystem.git"
   },
   "author": {
     "name": "jfderegowski",
