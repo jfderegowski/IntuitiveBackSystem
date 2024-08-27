@@ -5,8 +5,7 @@
   "description": "A simple and intuitive back system for Unity.",
   "unity": "2019.1",
   "dependencies": {
-    "com.unity.inputsystem": "1.0.0",
-    "com.noreleasedate.singletonsystem": "1.0.0"
+    "com.unity.inputsystem": "1.0.0"
   },
   "author": {
     "name": "jfderegowski",
