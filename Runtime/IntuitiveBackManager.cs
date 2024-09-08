@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using SingletonSystem.Runtime;
+using NoReleaseDate.SingletonSystem.Runtime;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
